@@ -46,15 +46,27 @@ while i < 60:
     # 切换到当前最新打开的窗口
     bro.switch_to.window(windows[-1])
     time.sleep(3)
-    bro.find_element('class name','video').click()#播放当前视频
-    #读取当前视频是否播放完毕，返回值为F,T，而且当前视频播放完毕后，会自动跳转到下一个视频
-    end_flag=False
-    #每2分钟读取一次视频播放进度，如果视频播放完毕，则跳出循环
-    while end_flag == False:
-        time.sleep(120)
-        xx = xx + 2
-        print('本视频已经学习', xx, '分钟')
+    #点击第一个视频链接
+    # 获取当前页面有几个视频
+    sp=bro.execute_script("return document.getElementsByClassName('vvitemtitle').length")#获取当前页面有多少视频
+    spxl=1#定义循环次数
+    while spxl <= sp:
+        time.sleep(3)
+        print ('当前视频编号为', spxl)
+        #点击第一个视频链接
+        bro.execute_script("return document.getElementsByClassName('vvitemtitle')["+str(spxl-1)+"].click()")
+        #读取当前视频是否播放完毕，返回值为F,T，而且当前视频播放完毕后，会自动跳转到下一个视频
         end_flag=bro.execute_script("return document.getElementsByClassName('videoplayer')[0].ended")
+        #每2分钟读取一次视频播放进度，如果第一个视频播放完毕，则开始播放第二个，以此类推，如果当前视频播放完毕，则跳出循环
+        while end_flag == False: #如果播放结束标志为F，则进入循环，每2分钟读取一次视频播放进度，如果当前视频播放完毕，则跳出循环
+            time.sleep(120)
+            xx = xx + 2
+            print('本视频已经学习', xx, '分钟')
+            end_flag=bro.execute_script("return document.getElementsByClassName('videoplayer')[0].ended")
+        else:
+            spxl = spxl + 1
+            pass
+
     else:
         # 关闭视频播放窗口
         windows = bro.window_handles
