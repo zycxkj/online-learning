@@ -32,7 +32,11 @@ while i < 60:
     bro.switch_to.window(windows[0])
     bro.refresh()
     time.sleep(3)
+    #点击学习课程，如果a标签名称发生变化，需要修改
     bro.find_element(By.XPATH,"//a[contains(text(),'学习课堂')]").click()
+    #点击学习课程后，进入页面，再次点击进入学习
+    time.sleep(2)
+    bro.find_element(By.XPATH, "//div[@class='irr']/div/div[@class='btn']").click()
     time.sleep(3)
     #点击当前页面第一个课程，因为新框架没有对按钮进行分类，所以只能选择class name为btn的第一个按钮
     bro.find_element(By.XPATH,"(//div[@class='btn'])[1]").click()
